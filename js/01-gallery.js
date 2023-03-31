@@ -1,6 +1,6 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
-console.log(galleryItems);
+
 const galleryContainer=document.querySelector('.gallery');
 
 
@@ -26,16 +26,21 @@ function createGalleryItemsList(galleryItems) {
 
 galleryContainer.insertAdjacentHTML('beforeend', galleryMarkUp);
 
-galleryContainer.addEventListener('click', onGalleryContainerClick);
 
-
-function onGalleryContainerClick(event){
+function onGalleryContainerClick(event) {
   event.preventDefault();
 
-  if (!event.target.classList.contains('gallery__item')) {
+  const {dataset:{ source }} = event.target;
+
+  if (!source) {
     return;
   }
 
+  const instance = basicLightbox.create(`
+    <img src="${source}" />
+  `);
+
+  instance.show();
 }
 
- 
+galleryContainer.addEventListener('click', onGalleryContainerClick);
