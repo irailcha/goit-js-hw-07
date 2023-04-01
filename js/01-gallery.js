@@ -30,17 +30,35 @@ galleryContainer.insertAdjacentHTML('beforeend', galleryMarkUp);
 function onGalleryContainerClick(event) {
   event.preventDefault();
 
-  const {dataset:{ source }} = event.target;
-
-  if (!source) {
-    return;
-  }
-
-  const instance = basicLightbox.create(`
-    <img src="${source}" />
-  `);
+  const {dataset:{source}}=event.target;
+if (!source) {return;
+}
+const instance= basicLightbox.create(`
+    <div class="modal">
+      <img src="${source}", width="640px" />
+      <a>Close</a> </div>`, {
+    onShow: (instance) =>{
+      const onKeyDown=(event) => {
+        if (event.key=== 'Escape') {
+          instance.close();
+        }
+      };
+      document.addEventListener('keydown', onKeyDown);
+      instance.element().querySelector('a').onclick = instance.close;
+    },
+    onClose: (instance) => {
+      const onKeyDown= (event) => {
+        if (event.key=== 'Escape') {
+          instance.close();
+        }
+      };
+      document.removeEventListener('keydown', onKeyDown);
+    }
+  });
 
   instance.show();
 }
 
 galleryContainer.addEventListener('click', onGalleryContainerClick);
+
+console.log(galleryItems);
